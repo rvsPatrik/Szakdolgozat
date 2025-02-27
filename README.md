@@ -16,6 +16,8 @@ A szakdolgozat célja egy skálázható, felhasználóbarát webalapú raktárke
 
 A szakdolgozat célja egy webalapú raktárkezelő rendszer fejlesztése, amely lehetővé teszi a felhasználók számára, hogy különböző termékeket és készleteket kezeljenek egy adatbázisban. A rendszer három fő funkcióval rendelkezik: új elemek hozzáadása, meglévő elemek törlése, és elemek adatainak módosítása. A cél egy hatékony, skálázható, és biztonságos webalkalmazás létrehozása. Az alkalmazás hasznos lehet kereskedők számára akik át szeretnék látni raktárkészletük.
 
+---
+
 #### Szakdolgozat Supervisor
 
 Dr. Tóth Ádám
