@@ -1,0 +1,10 @@
+cd documents\github\szakdolgozat
+
+Backend:
+    venv\Scripts\activate
+    cd backend
+    python manage.py runserver
+
+Frontend:
+    cd frontend
+    npm start
