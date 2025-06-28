@@ -7,6 +7,11 @@ import { getUserRole } from './utils/auth';
 import ProductList from './pages/ProductList';
 import ProductForm from './pages/ProductForm';
 import EditProduct from './pages/EditProduct';
+import SupplyList from './pages/SupplyList';
+import NewSupply from './pages/NewSupply';
+import CategoryList from './pages/CategoryList';
+import Register from './pages/Register';
+
 
 
 function App() {
@@ -28,6 +33,12 @@ function App() {
         <Route path="/products" element={token ? <ProductList /> : <Navigate to="/login" />} />
         <Route path="/products/new" element={token ? <ProductForm /> : <Navigate to="/login" />} />
         <Route path="/products/:id/edit" element={token ? <EditProduct /> : <Navigate to="/login" />} />
+        <Route path="/supplies" element={token ? <SupplyList /> : <Navigate to="/login" />} />
+        <Route path="/supplies/new" element={token ? <NewSupply /> : <Navigate to="/login" />} />
+        <Route path="/categories" element={token ? <CategoryList /> : <Navigate to="/login" />} />
+        <Route path="/register" element={<Register />} />
+
+
 
       </Routes>
     </BrowserRouter>
