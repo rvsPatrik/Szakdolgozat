@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'products',
     'categories',
+    'suppliers',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True  # csak lokálisan! Később szűkítsd!
+CORS_ORIGIN_ALLOW_ALL = True 
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -94,7 +95,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'warehouse',
         'USER': 'root',
-        'PASSWORD': 'jelszo',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306',
     }
