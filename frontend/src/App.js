@@ -4,6 +4,9 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import { getUserRole } from './utils/auth';
+import ProductList from './pages/ProductList';
+import ProductForm from './pages/ProductForm';
+
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -21,6 +24,9 @@ function App() {
       <Routes>
         <Route path="/" element={token ? <Home role={role} /> : <Navigate to="/login" />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/products" element={token ? <ProductList /> : <Navigate to="/login" />} />
+        <Route path="/products/new" element={token ? <ProductForm /> : <Navigate to="/login" />} />
+
       </Routes>
     </BrowserRouter>
   );
