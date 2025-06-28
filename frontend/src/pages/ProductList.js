@@ -37,7 +37,7 @@ const ProductList = () => {
   return (
     <div>
       <h2>Terméklista</h2>
-      {role == 'admin' && (
+      {role === 'admin' && (
         <Link to="/products/new">➕ Új termék hozzáadása</Link>
       )}
       <ul>
