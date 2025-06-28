@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ const ProductList = () => {
     fetchData();
   }, []);
 
-   return (
+     return (
     <div>
       <h2>Terméklista</h2>
       <Link to="/products/new">➕ Új termék hozzáadása</Link>
@@ -28,7 +29,8 @@ const ProductList = () => {
             <strong>{product.name}</strong><br />
             {product.quantity} db – {product.price} Ft<br />
             Hely: {product.location || '-'}<br />
-            EAN: {product.ean_code || 'nincs megadva'}
+            EAN: {product.ean_code || 'nincs megadva'}<br />
+            <Link to={`/products/${product.id}/edit`}>✏️ Szerkesztés</Link>
           </li>
         ))}
       </ul>

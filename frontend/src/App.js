@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import { getUserRole } from './utils/auth';
 import ProductList from './pages/ProductList';
 import ProductForm from './pages/ProductForm';
+import EditProduct from './pages/EditProduct';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/products" element={token ? <ProductList /> : <Navigate to="/login" />} />
         <Route path="/products/new" element={token ? <ProductForm /> : <Navigate to="/login" />} />
+        <Route path="/products/:id/edit" element={token ? <EditProduct /> : <Navigate to="/login" />} />
 
       </Routes>
     </BrowserRouter>
