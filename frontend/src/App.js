@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
@@ -10,13 +10,19 @@ import CategoryList from './pages/CategoryList';
 import SupplierList from './pages/SupplierList';
 import SupplyList from './pages/SupplyList';
 import NewSupply from './pages/NewSupply';
+import './App.css';
 
 function App() {
   const token = localStorage.getItem('token');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   return (
     <div>
-      {token && <Sidebar />}
+      {token && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
+      <div className={`main-content ${sidebarOpen ? 'shifted' : ''}`}>
+
       <Routes>
         <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
         <Route path="/register" element={<Register />} />
@@ -29,6 +35,7 @@ function App() {
         <Route path="/supplies" element={token ? <SupplyList /> : <Navigate to="/login" />} />
         <Route path="/supplies/new" element={token ? <NewSupply /> : <Navigate to="/login" />} />
       </Routes>
+    </div>
     </div>
   );
 }

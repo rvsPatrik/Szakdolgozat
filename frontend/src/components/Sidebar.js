@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const menuItems = [
+  { path: '/', label: 'Főoldal', icon: '🏠' },
+  { path: '/products', label: 'Termékek', icon: '📦' },
+  { path: '/categories', label: 'Kategóriák', icon: '🗂️' },
+  { path: '/suppliers', label: 'Beszállítók', icon: '🚚' },
+  { path: '/supplies', label: 'Beszállítások', icon: '📥' },
+  { path: '/supplies/new', label: 'Új beszállítás', icon: '➕' },
+  { path: '/logout', label: 'Kijelentkezés', icon: '🚪' },
+];
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
-    <>
-      <button className="hamburger" onClick={toggleSidebar}>
-        ☰
-      </button>
-      <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <button className="close" onClick={toggleSidebar}>×</button>
-        <ul>
-          <li><Link to="/">🏠 Főoldal</Link></li>
-          <li><Link to="/products">📦 Termékek</Link></li>
-          <li><Link to="/categories">🗂️ Kategóriák</Link></li>
-          <li><Link to="/suppliers">🚚 Beszállítók</Link></li>
-          <li><Link to="/supplies">📥 Beszállítások</Link></li>
-          <li><Link to="/supplies/new">➕ Új beszállítás</Link></li>
-          <li><Link to="/logout">🚪 Kijelentkezés</Link></li>
-        </ul>
-      </nav>
-    </>
+    <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <button className="hamburger" onClick={toggleSidebar}>☰</button>
+      <ul>
+        {menuItems.map((item) => (
+          <li key={item.path}>
+            <Link to={item.path}>
+              <span className="icon">{item.icon}</span>
+              {isOpen && <span className="label">{item.label}</span>}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
