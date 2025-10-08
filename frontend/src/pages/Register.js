@@ -1,36 +1,64 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './styles/Login.css';
 
-const Register = () => {
-  const [form, setForm] = useState({ username: '', password: '' });
+function Register() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      await axios.post('http://localhost:8000/api/register/', form);
-      alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
+      const response = await axios.post('http://localhost:8000/api/token/', {
+        username,
+        password,
+      });
       navigate('/login');
-    } catch (error) {
-      alert('Hiba történt a regisztráció során.');
+    } catch (err) {
+      setError('Registration failed. Try a different username.');
     }
   };
 
+  const handleLoginRedirect = () => {
+    navigate('/login');
+  };
+
   return (
-    <div>
-      <h2>Regisztráció</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="username" placeholder="Felhasználónév" value={form.username} onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Jelszó" value={form.password} onChange={handleChange} required />
-        <button type="submit">Regisztrálok</button>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleRegister}>
+        <h2>Register</h2>
+        <label>
+          Username:
+          <input
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
+        <div className="login-buttons">
+          <button type="submit" className="login-btn">Register</button>
+          <button type="button" className="register-btn" onClick={handleLoginRedirect}>
+            Login
+          </button>
+        </div>
       </form>
     </div>
   );
-};
+}
 
 export default Register;

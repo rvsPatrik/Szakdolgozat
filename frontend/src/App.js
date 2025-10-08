@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import { getUserRole } from './utils/auth';
@@ -10,9 +11,6 @@ import EditProduct from './pages/EditProduct';
 import SupplyList from './pages/SupplyList';
 import NewSupply from './pages/NewSupply';
 import CategoryList from './pages/CategoryList';
-import Register from './pages/Register';
-
-
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -24,22 +22,84 @@ function App() {
 
   const role = token ? getUserRole(token) : null;
 
+  // ProtectedRoute component
+  const ProtectedRoute = ({ children }) => {
+    if (!token) {
+      return <Navigate to="/login" replace />;
+    }
+    return children;
+  };
+
   return (
     <BrowserRouter>
-      {token && <Navbar onLogout={handleLogout} />}
+      <Navbar onLogout={handleLogout} token={token} />
       <Routes>
-        <Route path="/" element={token ? <Home role={role} /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/products" element={token ? <ProductList /> : <Navigate to="/login" />} />
-        <Route path="/products/new" element={token ? <ProductForm /> : <Navigate to="/login" />} />
-        <Route path="/products/:id/edit" element={token ? <EditProduct /> : <Navigate to="/login" />} />
-        <Route path="/supplies" element={token ? <SupplyList /> : <Navigate to="/login" />} />
-        <Route path="/supplies/new" element={token ? <NewSupply /> : <Navigate to="/login" />} />
-        <Route path="/categories" element={token ? <CategoryList /> : <Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
-
-
-
+        <Route
+          path="/login"
+          element={<Login setToken={setToken} />}
+        />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home role={role} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <ProductList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/new"
+          element={
+            <ProtectedRoute>
+              <ProductForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/supplies"
+          element={
+            <ProtectedRoute>
+              <SupplyList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/supplies/new"
+          element={
+            <ProtectedRoute>
+              <NewSupply />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <CategoryList />
+            </ProtectedRoute>
+          }
+        />
+        {/* Redirect any unknown route to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
