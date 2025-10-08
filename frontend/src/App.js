@@ -1,42 +1,47 @@
-import React, { useState} from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import Home from './pages/Home';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
-import Register from './pages/Register';
+import Home from './pages/Home';
+import Navbar from './components/Navbar';
+import { getUserRole } from './utils/auth';
 import ProductList from './pages/ProductList';
 import ProductForm from './pages/ProductForm';
-import CategoryList from './pages/CategoryList';
-import SupplierList from './pages/SupplierList';
+import EditProduct from './pages/EditProduct';
 import SupplyList from './pages/SupplyList';
 import NewSupply from './pages/NewSupply';
-import './App.css';
+import CategoryList from './pages/CategoryList';
+import Register from './pages/Register';
+
+
 
 function App() {
-  const token = localStorage.getItem('token');
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
+
+  const role = token ? getUserRole(token) : null;
 
   return (
-    <div>
-      {token && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
-      <div className={`main-content ${sidebarOpen ? 'shifted' : ''}`}>
-
+    <BrowserRouter>
+      {token && <Navbar onLogout={handleLogout} />}
       <Routes>
-        <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={token ? <Home role={role} /> : <Navigate to="/login" />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/products" element={token ? <ProductList /> : <Navigate to="/login" />} />
         <Route path="/products/new" element={token ? <ProductForm /> : <Navigate to="/login" />} />
-        <Route path="/products/:id/edit" element={token ? <ProductForm /> : <Navigate to="/login" />} />
-        <Route path="/categories" element={token ? <CategoryList /> : <Navigate to="/login" />} />
-        <Route path="/suppliers" element={token ? <SupplierList /> : <Navigate to="/login" />} />
+        <Route path="/products/:id/edit" element={token ? <EditProduct /> : <Navigate to="/login" />} />
         <Route path="/supplies" element={token ? <SupplyList /> : <Navigate to="/login" />} />
         <Route path="/supplies/new" element={token ? <NewSupply /> : <Navigate to="/login" />} />
+        <Route path="/categories" element={token ? <CategoryList /> : <Navigate to="/login" />} />
+        <Route path="/register" element={<Register />} />
+
+
+
       </Routes>
-    </div>
-    </div>
+    </BrowserRouter>
   );
 }
 
