@@ -61,3 +61,20 @@
 .register-btn:hover {
   background: #1565c0;
 }
+
+
+.add-item-btn {
+  display: inline-block;
+  margin-bottom: 1rem;
+  background: #1976d2;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.add-item-btn:hover {
+  background: #1565c0;
+}

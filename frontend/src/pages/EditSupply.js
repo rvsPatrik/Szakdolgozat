@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './styles/Login.css';
 
-function NewSupply() {
+function EditSupply() {
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [product, setProduct] = useState('');
@@ -17,20 +18,28 @@ function NewSupply() {
     const token = localStorage.getItem('token');
     axios.get('http://localhost:8000/api/products/', {
       headers: { Authorization: `Bearer ${token}` }
-    }).then(res => setProducts(Array.isArray(res.data) ? res.data : []))
-      .catch(() => setProducts([]));
+    }).then(res => setProducts(res.data));
     axios.get('http://localhost:8000/api/suppliers/', {
       headers: { Authorization: `Bearer ${token}` }
-    }).then(res => setSuppliers(Array.isArray(res.data) ? res.data : []))
-      .catch(() => setSuppliers([]));
-  }, []);
+    }).then(res => setSuppliers(res.data));
+    axios.get(`http://localhost:8000/api/supplies/${id}/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => {
+      setProduct(res.data.product);
+      setSupplier(res.data.supplier);
+      setQuantity(res.data.quantity);
+      setNote(res.data.note);
+    })
+    .catch(() => setError('Nem sikerült betölteni a beszállítást.'));
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     const token = localStorage.getItem('token');
     try {
-      await axios.post('http://localhost:8000/api/supplies/', {
+      await axios.put(`http://localhost:8000/api/supplies/${id}/`, {
         product,
         supplier,
         quantity,
@@ -40,19 +49,19 @@ function NewSupply() {
       });
       navigate('/supplies');
     } catch (err) {
-      setError('Hiba történt a beszállítás hozzáadásakor.');
+      setError('Hiba történt a beszállítás módosításakor.');
     }
   };
 
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Új beszállítás</h2>
+        <h2>Beszállítás szerkesztése</h2>
         <label>
           Termék:
           <select value={product} onChange={e => setProduct(e.target.value)} required>
             <option value="" disabled>Válassz terméket</option>
-            {(products || []).map(p => (
+            {products.map(p => (
               <option key={p.id} value={p.id}>{p.name}</option>
             ))}
           </select>
@@ -61,7 +70,7 @@ function NewSupply() {
           Beszállító:
           <select value={supplier} onChange={e => setSupplier(e.target.value)} required>
             <option value="" disabled>Válassz beszállítót</option>
-            {(suppliers || []).map(s => (
+            {suppliers.map(s => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
@@ -76,11 +85,11 @@ function NewSupply() {
         </label>
         {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
         <div className="login-buttons">
-          <button type="submit" className="login-btn">Hozzáadás</button>
+          <button type="submit" className="login-btn">Mentés</button>
         </div>
       </form>
     </div>
   );
 }
 
-export default NewSupply;
+export default EditSupply;

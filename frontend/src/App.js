@@ -11,22 +11,51 @@ import EditProduct from './pages/EditProduct';
 import SupplyList from './pages/SupplyList';
 import NewSupply from './pages/NewSupply';
 import CategoryList from './pages/CategoryList';
+import AddCategory from './pages/AddCategory';
+import EditCategory from './pages/EditCategory';
+import EditSupply from './pages/EditSupply';
+
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const [role, setRole] = useState(null);
+
+  // Fetch role from backend after login
+  React.useEffect(() => {
+    const fetchRole = async () => {
+      if (token) {
+        try {
+          const res = await fetch('http://localhost:8000/api/users/me/', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await res.json();
+          setRole(data.role);
+        } catch {
+          setRole(null);
+        }
+      } else {
+        setRole(null);
+      }
+    };
+    fetchRole();
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
+    setRole(null);
   };
 
-  const role = token ? getUserRole(token) : null;
-
-  // ProtectedRoute component
+  // ProtectedRoute for non-viewers
   const ProtectedRoute = ({ children }) => {
-    if (!token) {
-      return <Navigate to="/login" replace />;
-    }
+    if (!token) return <Navigate to="/login" replace />;
+    if (role === 'viewer') return <Navigate to="/home" replace />;
+    return children;
+  };
+
+  // ViewerRoute for home and logout
+  const ViewerRoute = ({ children }) => {
+    if (!token) return <Navigate to="/login" replace />;
     return children;
   };
 
@@ -34,22 +63,17 @@ function App() {
     <BrowserRouter>
       <Navbar onLogout={handleLogout} token={token} />
       <Routes>
+        <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/register" element={<Register />} />
         <Route
-          path="/login"
-          element={<Login setToken={setToken} />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-        <Route
-          path="/"
+          path="/home"
           element={
-            <ProtectedRoute>
+            <ViewerRoute>
               <Home role={role} />
-            </ProtectedRoute>
+            </ViewerRoute>
           }
         />
+        {/* Only allow /home for viewers, all other routes redirect */}
         <Route
           path="/products"
           element={
@@ -75,6 +99,14 @@ function App() {
           }
         />
         <Route
+  path="/categories/:id/edit"
+  element={
+    <ProtectedRoute>
+      <EditCategory />
+    </ProtectedRoute>
+  }
+/>
+        <Route
           path="/supplies"
           element={
             <ProtectedRoute>
@@ -91,6 +123,14 @@ function App() {
           }
         />
         <Route
+          path="/supplies/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditSupply />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/categories"
           element={
             <ProtectedRoute>
@@ -98,8 +138,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Redirect any unknown route to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route
+    path="/categories/new"
+    element={
+      <ProtectedRoute>
+        <AddCategory />
+      </ProtectedRoute>
+    }
+  />
+        {/* Redirect any unknown route to /home */}
+        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>
   );

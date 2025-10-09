@@ -1,61 +1,107 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import './styles/Login.css';
 
-const EditProduct = () => {
+function EditProduct() {
   const { id } = useParams();
+  const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [price, setPrice] = useState('');
+  const [location, setLocation] = useState('');
+  const [ean_code, setEanCode] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: '',
-    price: '',
-    quantity: '',
-    location: '',
-    description: '',
-    ean_code: '',
-  });
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8000/api/products/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setForm(response.data);
-    };
-    fetchProduct();
+    const token = localStorage.getItem('token');
+    axios.get(`http://localhost:8000/api/products/${id}/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => {
+      setName(res.data.name);
+      setQuantity(res.data.quantity);
+      setPrice(res.data.price);
+      setLocation(res.data.location);
+      setEanCode(res.data.ean_code);
+    })
+    .catch(() => setError('Nem sikerült betölteni a terméket.'));
   }, [id]);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:8000/api/products/${id}/`, form, {
+      await axios.put(`http://localhost:8000/api/products/${id}/`, {
+        name,
+        quantity,
+        price,
+        location,
+        ean_code
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       navigate('/products');
-    } catch (error) {
-      alert('Hiba történt mentéskor');
+    } catch (err) {
+      setError('Hiba történt a termék módosításakor.');
     }
   };
 
   return (
-    <div>
-      <h2>Termék szerkesztése</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Név" value={form.name} onChange={handleChange} required />
-        <input name="price" type="number" step="0.01" placeholder="Ár" value={form.price} onChange={handleChange} required />
-        <input name="quantity" type="number" placeholder="Mennyiség" value={form.quantity} onChange={handleChange} required />
-        <input name="location" placeholder="Helyszín" value={form.location} onChange={handleChange} />
-        <input name="ean_code" placeholder="EAN kód" value={form.ean_code || ''} onChange={handleChange} />
-        <textarea name="description" placeholder="Leírás" value={form.description} onChange={handleChange} />
-        <button type="submit">Mentés</button>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>Termék szerkesztése</h2>
+        <label>
+          Név:
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Mennyiség:
+          <input
+            type="number"
+            value={quantity}
+            onChange={e => setQuantity(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Ár:
+          <input
+            type="number"
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Hely:
+          <input
+            type="text"
+            value={location}
+            onChange={e => setLocation(e.target.value)}
+          />
+        </label>
+        <label>
+          EAN kód:
+          <input
+            type="text"
+            value={ean_code}
+            onChange={e => setEanCode(e.target.value)}
+          />
+        </label>
+        {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
+        <div className="login-buttons">
+          <button type="submit" className="login-btn">Mentés</button>
+        </div>
       </form>
     </div>
   );
-};
+}
 
 export default EditProduct;

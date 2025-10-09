@@ -1,33 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import ListItemCard from '../components/ListItemCard';
 
-const CategoryList = () => {
+function CategoryList() {
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/categories/', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(response.data);
-    };
-    fetchCategories();
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:8000/api/categories/', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => {
+      setCategories(Array.isArray(res.data) ? res.data : []);
+    })
+    .catch(() => setCategories([]));
   }, []);
 
   return (
     <div>
       <h2>Kategóriák</h2>
-      <ul>
-        {categories.map(cat => (
-          <li key={cat.id}>
-            <strong>{cat.name}</strong><br />
-            {cat.description || 'Nincs leírás'}
-          </li>
+      <Link to="/categories/new" className="add-item-btn">➕ Új kategória hozzáadása</Link>
+      <div className="list-header-row">
+        <div className="list-header-cell">Név</div>
+        <div className="list-header-cell">Leírás</div>
+      </div>
+      <div>
+        {(categories || []).map(category => (
+          <ListItemCard
+            key={category.id}
+            data={[category.name, category.description]}
+            onEdit={() => navigate(`/categories/${category.id}/edit`)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
-};
+}
 
 export default CategoryList;

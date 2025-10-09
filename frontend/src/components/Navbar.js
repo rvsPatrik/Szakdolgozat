@@ -1,5 +1,5 @@
 import React from 'react';
-import './Navbar.css';
+import '../pages/styles/Navbar.css';
 
 function Navbar({ onLogout, token }) {
   return (
@@ -9,7 +9,6 @@ function Navbar({ onLogout, token }) {
       </div>
       <div className="navbar-section navbar-center">
         <ul className="navbar-links">
-          {/* Home button removed */}
           <li><a href="/products">Products</a></li>
           <li><a href="/supplies">Supplies</a></li>
           <li><a href="/categories">Categories</a></li>

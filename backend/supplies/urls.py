@@ -1,10 +1,7 @@
-from rest_framework.routers import DefaultRouter
-from .views import SupplyViewSet
-from django.urls import path, include
-
-router = DefaultRouter()
-router.register(r'supplies', SupplyViewSet)
+from django.urls import path
+from .views import SupplyListCreateView, SupplyDetailView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', SupplyListCreateView.as_view()),
+    path('<int:pk>/', SupplyDetailView.as_view()),  # Enables GET/PUT for a single supply
 ]
