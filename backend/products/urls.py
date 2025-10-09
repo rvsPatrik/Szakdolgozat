@@ -1,10 +1,7 @@
-from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
-from django.urls import path, include
-
-router = DefaultRouter()
-router.register(r'products', ProductViewSet)
+from django.urls import path
+from .views import ProductListCreateView, ProductDetailView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', ProductListCreateView.as_view()),
+    path('<int:pk>/', ProductDetailView.as_view()),  # Enables GET/PUT for a single product
 ]

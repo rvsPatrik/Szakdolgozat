@@ -1,10 +1,7 @@
-from rest_framework.routers import DefaultRouter
-from .views import CategoryViewSet
-from django.urls import path, include
-
-router = DefaultRouter()
-router.register(r'categories', CategoryViewSet)
+from django.urls import path
+from .views import CategoryListCreateView, CategoryDetailView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', CategoryListCreateView.as_view()),
+    path('<int:pk>/', CategoryDetailView.as_view()),  # This enables GET/PUT for a single category
 ]
