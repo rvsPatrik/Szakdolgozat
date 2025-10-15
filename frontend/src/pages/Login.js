@@ -29,6 +29,7 @@ function Login({ setToken }) {
       }
       localStorage.setItem('token', response.data.access);
       setToken(response.data.access);
+      navigate('/home');
     } catch (err){
       alert("Hibás bejelentkezés");
     }
