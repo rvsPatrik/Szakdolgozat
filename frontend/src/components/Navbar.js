@@ -1,6 +1,8 @@
 import React from 'react';
 import '../pages/styles/Navbar.css';
 
+
+
 function Navbar({ onLogout, token }) {
   return (
     <nav className="navbar">

@@ -3,5 +3,5 @@ from .views import ProductListCreateView, ProductDetailView
 
 urlpatterns = [
     path('', ProductListCreateView.as_view()),
-    path('<int:pk>/', ProductDetailView.as_view()),  # Enables GET/PUT for a single product
+    path('<int:pk>/', ProductDetailView.as_view()),
 ]
