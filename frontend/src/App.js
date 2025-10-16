@@ -19,7 +19,8 @@ import AdminSql from './pages/AdminSql';
 import AdminSupplierManagement from './pages/AdminSupplierManagement';
 import EditAdminSupplier from './pages/EditAdminSupplier';
 import AdminSupplierForm from './pages/AdminSupplierForm';
-
+import UserManageAdmin from './pages/UserManageAdmin';
+import ChangeUserAdmin from './pages/ChangeUserAdmin';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -181,6 +182,23 @@ function App() {
             </AdminRoute>
           }
         />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <UserManageAdmin />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users/:id/edit"
+          element={
+            <AdminRoute>
+              <ChangeUserAdmin />
+            </AdminRoute>
+          }
+        />
+        
         <Route
           path="/categories"
           element={

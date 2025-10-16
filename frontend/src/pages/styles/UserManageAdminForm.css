@@ -1,0 +1,181 @@
+/* Clean, minimal styles for UserManageAdmin / ChangeUserAdmin pages */
+
+:root{
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --accent: #0b74de;
+  --danger: #c0392b;
+  --success: #16a34a;
+  --border: #e6e6e6;
+  --radius: 8px;
+  --container-max: 100%;
+  --gap: 12px;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
+.admin-page{
+  max-width: var(--container-max);
+  margin: 22px auto;
+  background: var(--bg);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  color: #111827;
+}
+
+/* Heading */
+.admin-page h2{
+  margin: 0 0 14px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Error / status */
+.error{
+  background: #fff1f0;
+  color: var(--danger);
+  border: 1px solid rgba(192,57,43,0.12);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+/* Generic form layout */
+.user-edit-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+/* Each row spans one column; if a label + field pair, use the .form-row container */
+.form-row{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Label */
+.form-row > label{
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Static text (username) */
+.form-row > div{
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #0f172a;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Inputs & selects */
+.user-edit-form input[type="text"],
+.user-edit-form input[type="password"],
+.user-edit-form input[type="email"],
+.user-edit-form select,
+.user-edit-form textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  outline: none;
+  font-size: 0.95rem;
+  transition: box-shadow .12s, border-color .12s;
+  box-sizing: border-box;
+}
+
+.user-edit-form input:focus,
+.user-edit-form select:focus,
+.user-edit-form textarea:focus{
+  border-color: rgba(11,116,222,0.9);
+  box-shadow: 0 4px 10px rgba(11,116,222,0.06);
+}
+
+/* Checkbox alignment */
+.form-row input[type="checkbox"]{
+  width: 18px;
+  height: 18px;
+  transform: translateY(3px);
+}
+
+/* Buttons */
+.form-actions, .pw-section .actions{
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+button{
+  cursor: pointer;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: white;
+  background: var(--accent);
+  transition: transform .06s ease, opacity .08s;
+}
+
+button:hover{ transform: translateY(-1px); }
+button:active{ transform: translateY(0); }
+button:disabled{ opacity: 0.6; cursor: default; transform: none; }
+
+/* Secondary / cancel button */
+button[type="button"]{
+  background: #6b7280;
+}
+
+/* Password section */
+.pw-section{
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fbfdff;
+  border: 1px solid var(--border);
+}
+
+.pw-section h3{
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+/* Responsive: single column for narrow screens */
+@media (max-width: 860px){
+  .user-edit-form{
+    grid-template-columns: 1fr;
+  }
+  .form-actions{
+    justify-content: flex-start;
+  }
+}
+
+/* Small utility */
+.small-muted{
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* Success banner (used by code if needed) */
+.success{
+  background: #ecfdf5;
+  color: var(--success);
+  border: 1px solid rgba(22,163,74,0.12);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
