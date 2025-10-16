@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'categories',
     'suppliers',
     'supplies',
+    'admin_api',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 
 AUTH_USER_MODEL = 'users.User'
 

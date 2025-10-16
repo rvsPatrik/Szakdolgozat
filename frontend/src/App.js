@@ -14,6 +14,10 @@ import CategoryList from './pages/CategoryList';
 import AddCategory from './pages/AddCategory';
 import EditCategory from './pages/EditCategory';
 import EditSupply from './pages/EditSupply';
+import Admin from './pages/Admin';
+import AdminSql from './pages/AdminSql';
+
+
 
 
 function App() {
@@ -56,6 +60,14 @@ function App() {
   // ViewerRoute for home and logout
   const ViewerRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
+    return children;
+  };
+
+  const AdminRoute = ({ children }) => {
+    if (!token) return <Navigate to="/login" replace />;
+    //if (role !== 'admin') return <Navigate to="/home" replace />;
+    if (role === 'viewer') return <Navigate to="/home" replace />
+    if (role === 'user') return <Navigate to="/home" replace />;
     return children;
   };
 
@@ -128,6 +140,23 @@ function App() {
             <ProtectedRoute>
               <EditSupply />
             </ProtectedRoute>
+          }
+        />
+        <Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <Admin />
+    </AdminRoute>
+  }
+/>
+
+<     Route
+          path="/admin/sql"
+          element={
+            <AdminRoute>
+              <AdminSql />
+            </AdminRoute>
           }
         />
         <Route

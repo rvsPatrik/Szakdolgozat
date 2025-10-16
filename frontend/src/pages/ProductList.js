@@ -27,7 +27,7 @@ function ProductList() {
       <div className="product-table-header">
         <div className="product-table-cell">Név</div>
         <div className="product-table-cell">Mennyiség</div>
-        <div className="product-table-cell">Ár</div>
+        <div className="product-table-cell">Ár (Ft)</div>
         <div className="product-table-cell">Hely</div>
         <div className="product-table-cell">EAN kód</div>
         <div className="product-table-cell"></div>
