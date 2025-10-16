@@ -16,8 +16,9 @@ import EditCategory from './pages/EditCategory';
 import EditSupply from './pages/EditSupply';
 import Admin from './pages/Admin';
 import AdminSql from './pages/AdminSql';
-
-
+import AdminSupplierManagement from './pages/AdminSupplierManagement';
+import EditAdminSupplier from './pages/EditAdminSupplier';
+import AdminSupplierForm from './pages/AdminSupplierForm';
 
 
 function App() {
@@ -156,6 +157,31 @@ function App() {
           element={
             <AdminRoute>
               <AdminSql />
+            </AdminRoute>
+          }
+        />
+          <Route
+          path="/admin/suppliers"
+          element={
+            <AdminRoute>
+              <AdminSupplierManagement />
+            </AdminRoute>
+          }
+        />  
+        route
+        <Route
+          path="/admin/suppliers/new" 
+          element={
+            <AdminRoute>
+              <AdminSupplierForm />
+            </AdminRoute>
+          }
+        />
+          <Route
+          path="/admin/suppliers/:id/edit"
+          element={
+            <AdminRoute>
+              <EditAdminSupplier />
             </AdminRoute>
           }
         />
