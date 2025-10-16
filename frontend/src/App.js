@@ -14,13 +14,18 @@ import CategoryList from './pages/CategoryList';
 import AddCategory from './pages/AddCategory';
 import EditCategory from './pages/EditCategory';
 import EditSupply from './pages/EditSupply';
-
+import Admin from './pages/Admin';
+import AdminSql from './pages/AdminSql';
+import AdminSupplierManagement from './pages/AdminSupplierManagement';
+import EditAdminSupplier from './pages/EditAdminSupplier';
+import AdminSupplierForm from './pages/AdminSupplierForm';
+import UserManageAdmin from './pages/UserManageAdmin';
+import ChangeUserAdmin from './pages/ChangeUserAdmin';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [role, setRole] = useState(null);
 
-  // Fetch role from backend after login
   React.useEffect(() => {
     const fetchRole = async () => {
       if (token) {
@@ -46,16 +51,21 @@ function App() {
     setRole(null);
   };
 
-  // ProtectedRoute for non-viewers
   const ProtectedRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
     if (role === 'viewer') return <Navigate to="/home" replace />;
     return children;
   };
 
-  // ViewerRoute for home and logout
   const ViewerRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
+    return children;
+  };
+
+  const AdminRoute = ({ children }) => {
+    if (!token) return <Navigate to="/login" replace />;
+    if (role === 'viewer') return <Navigate to="/home" replace />
+    if (role === 'user') return <Navigate to="/home" replace />;
     return children;
   };
 
@@ -130,6 +140,65 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <Admin />
+    </AdminRoute>
+  }
+/>
+
+<     Route
+          path="/admin/sql"
+          element={
+            <AdminRoute>
+              <AdminSql />
+            </AdminRoute>
+          }
+        />
+          <Route
+          path="/admin/suppliers"
+          element={
+            <AdminRoute>
+              <AdminSupplierManagement />
+            </AdminRoute>
+          }
+        />  
+        route
+        <Route
+          path="/admin/suppliers/new" 
+          element={
+            <AdminRoute>
+              <AdminSupplierForm />
+            </AdminRoute>
+          }
+        />
+          <Route
+          path="/admin/suppliers/:id/edit"
+          element={
+            <AdminRoute>
+              <EditAdminSupplier />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <UserManageAdmin />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users/:id/edit"
+          element={
+            <AdminRoute>
+              <ChangeUserAdmin />
+            </AdminRoute>
+          }
+        />
+        
         <Route
           path="/categories"
           element={

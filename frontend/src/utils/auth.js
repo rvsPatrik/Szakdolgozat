@@ -1,10 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
 
-export const getUserRole = (token) => {
+export function getUserRole(token) {
+  if (!token) return null;
   try {
-    const decoded = jwtDecode(token);
-    return decoded.role || 'user';
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role || null;
   } catch {
-    return 'user';
+    return null;
   }
-};
+}

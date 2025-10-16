@@ -1,0 +1,73 @@
+.admin-supplier-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.admin-supplier-actions {
+  margin-bottom: 1rem;
+}
+
+.add-supplier-btn {
+  display: inline-block;
+  background: #1976d2;
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.supplier-table-header,
+.supplier-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 2fr 2fr 120px; 
+  align-items: center;
+  gap: 0;
+}
+
+.supplier-table-header {
+  font-weight: bold;
+  color: #0d47a1;
+  background: #eaf4ff;
+  border-radius: 6px;
+  padding: 0.6rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.supplier-table-cell {
+  padding: 0.35rem 0.6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.supplier-table-row {
+  background: #fff;
+  border: 1px solid #dbeefc;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.supplier-edit-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  justify-self: end;
+}
+
+.supplier-edit-btn:hover {
+  background: #1565c0;
+}
+
+.supplier-error {
+  color: #b00020;
+  margin: 0.5rem 0;
+}
