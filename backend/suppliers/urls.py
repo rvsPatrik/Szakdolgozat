@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(r'suppliers', SupplierViewSet)
 
 urlpatterns = [
-    path('', SupplierListCreateView.as_view()),       # GET list, POST create
-    path('<int:pk>/', SupplierDetailView.as_view()),  # GET/PUT/PATCH/DELETE for single supplier
+    path('', SupplierListCreateView.as_view()),
+    path('<int:pk>/', SupplierDetailView.as_view()),
 ]

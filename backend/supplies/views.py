@@ -46,7 +46,6 @@ class SupplyListCreateView(generics.ListCreateAPIView):
 
         with transaction.atomic():
             product = None
-
             if product_id:
                 try:
                     product = Product.objects.get(pk=product_id)

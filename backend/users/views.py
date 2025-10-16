@@ -17,7 +17,7 @@ class RegisterSerializer(ModelSerializer):
         
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        user.role = 'viewer'  # Set default role to viewer
+        user.role = 'viewer'
         user.save()
         return user
 

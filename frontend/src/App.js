@@ -25,7 +25,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [role, setRole] = useState(null);
 
-  // Fetch role from backend after login
   React.useEffect(() => {
     const fetchRole = async () => {
       if (token) {
@@ -51,14 +50,12 @@ function App() {
     setRole(null);
   };
 
-  // ProtectedRoute for non-viewers
   const ProtectedRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
     if (role === 'viewer') return <Navigate to="/home" replace />;
     return children;
   };
 
-  // ViewerRoute for home and logout
   const ViewerRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
     return children;
@@ -66,7 +63,6 @@ function App() {
 
   const AdminRoute = ({ children }) => {
     if (!token) return <Navigate to="/login" replace />;
-    //if (role !== 'admin') return <Navigate to="/home" replace />;
     if (role === 'viewer') return <Navigate to="/home" replace />
     if (role === 'user') return <Navigate to="/home" replace />;
     return children;

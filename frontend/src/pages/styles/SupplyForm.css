@@ -93,14 +93,12 @@
   cursor: pointer;
 }
 
-/* small error text */
 .supply-form-wrapper .error {
   color: #b00020;
   margin-bottom: 8px;
   font-weight: 600;
 }
 
-/* responsive */
 @media (max-width: 760px){
   .supply-form-row{ grid-template-columns: 1fr; }
   .supply-form-actions{ flex-direction: column; align-items: stretch; }

@@ -19,14 +19,12 @@ class AdminSQLView(APIView):
 
         low = sql.lower()
 
-        # global forbidden tokens
         forbidden = ['drop ', 'alter ', 'create ', 'truncate ', 'grant ', 'revoke ',
                      '--', '/*', 'exec ', 'execute ']
         for token in forbidden:
             if token in low:
                 return Response({'detail': f'Forbidden token: {token.strip()}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # disallow multiple statements
         if ';' in sql:
             return Response({'detail': 'Multiple statements (;) are not allowed'}, status=status.HTTP_400_BAD_REQUEST)
 

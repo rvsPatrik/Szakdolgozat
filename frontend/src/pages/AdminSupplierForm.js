@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function AdminSupplierForm({ initialData = null, mode = 'create' /* 'create' | 'edit' */ }) {
+function AdminSupplierForm({ initialData = null, mode = 'create'}) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState(''); 
   const [phone, setPhone] = useState('');
