@@ -1,8 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from .views import SupplierViewSet
 from django.urls import path, include
-from .views import SupplierListCreateView, SupplierDetailView  # ensure detail view import exists
-
+from .views import SupplierListCreateView, SupplierDetailView  
 
 router = DefaultRouter()
 router.register(r'suppliers', SupplierViewSet)

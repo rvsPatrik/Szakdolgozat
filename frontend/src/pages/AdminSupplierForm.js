@@ -1,11 +1,10 @@
-// ...existing code...
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function AdminSupplierForm({ initialData = null, mode = 'create' /* 'create' | 'edit' */ }) {
   const [name, setName] = useState('');
-  const [description, setDescription] = useState(''); // store kapcsolattartó into description
+  const [description, setDescription] = useState(''); 
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -16,7 +15,6 @@ function AdminSupplierForm({ initialData = null, mode = 'create' /* 'create' | '
   useEffect(() => {
     if (initialData) {
       setName(initialData.name || '');
-      // map existing description (or fallback legacy fields) into the kapcsolattartó input
       setDescription(initialData.description || initialData.contact_person || initialData.contact || '');
       setPhone(initialData.phone || '');
       setEmail(initialData.email || '');
@@ -35,7 +33,6 @@ function AdminSupplierForm({ initialData = null, mode = 'create' /* 'create' | '
       return;
     }
 
-    // payload uses "description" to save the kapcsolattartó info
     const payload = { name, description, phone, email, address };
 
     try {
@@ -98,4 +95,3 @@ function AdminSupplierForm({ initialData = null, mode = 'create' /* 'create' | '
 }
 
 export default AdminSupplierForm;
-// ...existing code...
