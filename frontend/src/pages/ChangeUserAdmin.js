@@ -6,7 +6,7 @@ import './styles/UserManageAdminForm.css';
 const API = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const ROLE_OPTIONS = [
   { value: 'viewer', label: 'Viewer' },
-  { value: 'editor', label: 'Editor' },
+  { value: 'user', label: 'User' },
   { value: 'admin', label: 'Admin' },
 ];
 
@@ -17,6 +17,7 @@ export default function ChangeUserAdmin() {
   const headers = token ? { Authorization: `Bearer ${token}` } : null;
 
   const [user, setUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -27,15 +28,21 @@ export default function ChangeUserAdmin() {
     if (!headers) { setError('Not authenticated'); setLoading(false); return; }
     let mounted = true;
     setLoading(true);
-    axios.get(`${API}/api/users/${id}/`, { headers })
+
+    const userReq = axios.get(`${API}/api/users/${id}/`, { headers })
       .then(res => { if (mounted) setUser(res.data); })
       .catch(err => {
         const msg = err.response?.data || err.message;
         if (mounted) setError('Failed to load user: ' + String(msg));
-      })
-      .finally(() => mounted && setLoading(false));
+      });
+
+    const meReq = axios.get(`${API}/api/users/me/`, { headers })
+      .then(res => { if (mounted) setCurrentUserId(res.data.id); })
+      .catch(() => { });
+
+    Promise.all([userReq, meReq]).finally(() => mounted && setLoading(false));
     return () => { mounted = false; };
-  }, [id]); // eslint-disable-line
+  }, [id]);
 
   function updateField(field, value) {
     setUser(prev => ({ ...prev, [field]: value }));
@@ -81,12 +88,32 @@ export default function ChangeUserAdmin() {
     }
   }
 
+  async function handleDelete() {
+    setError('');
+    if (!headers) { setError('Not authenticated'); return; }
+    if (currentUserId && Number(currentUserId) === Number(id)) {
+      setError("You can't delete your own account.");
+      return;
+    }
+
+    const confirmed = window.confirm('Are you sure you want to DELETE this user? This action cannot be undone.');
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`${API}/api/users/${id}/`, { headers });
+      navigate('/admin/users');
+    } catch (err) {
+      const msg = err.response?.data?.detail || err.response?.data || err.message;
+      setError('Delete failed: ' + String(msg));
+    }
+  }
+
   if (loading) return <div className="admin-page">Loading…</div>;
   if (!user) return <div className="admin-page">{error ? <div className="error">{error}</div> : 'User not found'}</div>;
 
   return (
     <div className="admin-page">
-      <h2>Edit user "{user.username}"</h2>
+      <h2>Edit user #{user.id}</h2>
       {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSave} className="user-edit-form">
@@ -128,6 +155,14 @@ export default function ChangeUserAdmin() {
         <div className="form-actions">
           <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save'}</button>
           <button type="button" onClick={() => navigate('/admin/users')}>Cancel</button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            style={{ marginLeft: 8, background: '#c0392b', color: 'white' }}
+            title="Delete user"
+          >
+            Delete
+          </button>
         </div>
       </form>
 

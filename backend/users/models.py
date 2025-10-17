@@ -6,6 +6,7 @@ class User(AbstractUser):
 
     email = models.EmailField(max_length=254, blank=True)
 
+    is_active = models.BooleanField(default=False)
 
     ROLE_CHOICES = [
         ('admin', 'Admin'),

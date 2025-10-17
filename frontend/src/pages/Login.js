@@ -14,24 +14,44 @@ function Login({ setToken }) {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:8000/api/token/', {
+      const res = await axios.post('http://localhost:8000/api/users/token/', {
         username,
         password,
       });
-      const token = response.data.token;
-      if (token){
-        setToken(token);
-        localStorage.setItem('token', token);
-        navigate('/products');
+
+      const token = res.data?.access || res.data?.token || res.data?.access_token;
+      if (!token) {
+        throw new Error('No token returned from server');
       }
-      else{
-        setError('Hibás bejelentkezés');
-      }
-      localStorage.setItem('token', response.data.access);
-      setToken(response.data.access);
+
+      localStorage.setItem('token', token);
+      if (setToken) setToken(token);
       navigate('/home');
-    } catch (err){
-      alert("Hibás bejelentkezés");
+    } catch (err) {
+      const payload = err.response?.data;
+      let message = 'Hibás bejelentkezés';
+
+      if (payload) {
+        if (typeof payload === 'string') {
+          message = payload;
+        } else if (payload.detail) {
+          message = payload.detail;
+        } else if (payload.non_field_errors) {
+          message = Array.isArray(payload.non_field_errors)
+            ? payload.non_field_errors.join(' ')
+            : String(payload.non_field_errors);
+        } else {
+          const flat = Object.entries(payload)
+            .map(([k, v]) => (Array.isArray(v) ? v.join(' ') : String(v)))
+            .join(' | ');
+          if (flat) message = flat;
+        }
+      } else if (err.message) {
+        message = err.message;
+      }
+
+      setError(message);
+      alert(message);
     }
   };
 

@@ -40,7 +40,21 @@ export default function UserManageAdmin() {
       setError('Failed to load users: ' + String(msg));
     } finally {
       setLoading(false);
+
+
+
     }
+
+
+
+  }
+    function getRoleLabel(u) {
+    if (!u) return 'N/A';
+    const r = String(u.role || 'viewer').toLowerCase();
+    if (r === 'admin') return 'admin';
+    if (r === 'user') return 'user';
+    if (r === 'viewer') return 'viewer';
+    return r;
   }
 
   return (
@@ -58,7 +72,7 @@ export default function UserManageAdmin() {
               <th>Username</th>
               <th>Full name</th>
               <th>Email</th>
-              <th>Role / is_staff</th>
+              <th>Role</th>
               <th>Active</th>
               <th>Actions</th>
             </tr>
@@ -70,9 +84,7 @@ export default function UserManageAdmin() {
                 <td>{u.username}</td>
                 <td>{[u.first_name, u.last_name].filter(Boolean).join(' ')}</td>
                 <td>{u.email}</td>
-                <td>
-                  {u.role ?? (u.is_staff ? 'admin/editor' : 'viewer')}
-                </td>
+                <td>{getRoleLabel(u)}</td>
                 <td>{u.is_active ? 'Yes' : 'No'}</td>
                 <td>
                   <button onClick={() => navigate(`/admin/users/${u.id}/edit`)}>
