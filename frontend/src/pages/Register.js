@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './styles/Login.css';
+import './styles/Register.css';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-function Register() {
+export default function Register() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const validate = () => {
+    if (!username.trim()) return 'Username is required.';
+    if (!email.trim()) return 'Email is required.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email is invalid.';
     if (!firstName.trim()) return 'First name is required.';
     if (!lastName.trim()) return 'Last name is required.';
-    if (!email.trim()) return 'Email is required.';
-    // basic email check
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email is invalid.';
-    if (!username.trim()) return 'Username is required.';
     if (!password) return 'Password is required.';
     if (password.length < 6) return 'Password must be at least 6 characters.';
     return null;
@@ -42,42 +41,56 @@ function Register() {
       });
       navigate('/login');
     } catch (err) {
-      const msg = err.response?.data || err.message;
-      // normalize serializer errors (object) into a string
-      if (typeof msg === 'object') {
-        const flat = Object.entries(msg).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(' ') : v}`).join(' | ');
+      const payload = err.response?.data;
+      if (payload && typeof payload === 'object') {
+        const flat = Object.entries(payload)
+          .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(' ') : v}`)
+          .join(' | ');
         setError(flat || 'Registration failed');
       } else {
-        setError(String(msg));
+        setError(err.message || 'Registration failed');
       }
     }
   };
 
   return (
-    <div className="login-page">
-      <h2>Register</h2>
-      {error && <div className="error">{error}</div>}
-      <form onSubmit={handleSubmit} className="login-form" noValidate>
-        <label>First name</label>
-        <input value={firstName} onChange={e => setFirstName(e.target.value)} placeholder="First name" required />
+    <div className="register-page">
+      <div className="register-card">
+        <h2 className="register-title">Create account</h2>
+        {error && <div className="error">{error}</div>}
 
-        <label>Last name</label>
-        <input value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Last name" required />
+        <form className="register-form" onSubmit={handleSubmit} noValidate>
+          <div className="form-row">
+            <label>Username</label>
+            <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" required />
+          </div>
 
-        <label>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
+          <div className="form-row">
+            <label>Email</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required />
+          </div>
 
-        <label>Username</label>
-        <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" required />
+          <div className="form-row">
+            <label>First name</label>
+            <input value={firstName} onChange={e => setFirstName(e.target.value)} placeholder="First name" required />
+          </div>
 
-        <label>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
+          <div className="form-row">
+            <label>Last name</label>
+            <input value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Last name" required />
+          </div>
 
-        <div style={{ marginTop: 12 }}>
-          <button type="submit">Register</button>
-        </div>
-      </form>
+          <div className="form-row">
+            <label>Password</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
+          </div>
+
+          <div className="form-actions">
+            <button className="btn-primary" type="submit">Register</button>
+            <button type="button" className="btn-secondary" onClick={() => navigate('/login')}>Back to login</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
-export default Register;

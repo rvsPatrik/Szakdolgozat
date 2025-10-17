@@ -13,7 +13,7 @@ function Admin() {
         <button className="admin-menu-btn" onClick={() => navigate('/admin/suppliers')}>suppliers</button>
         <button className="admin-menu-btn" onClick={() => navigate('/admin/sql')}>sql query</button>
       </div>
-      {/* Ide jön majd a tartalom */}
+      { /* Nemtom majd lesz vmi */}
     </div>
   );
 }

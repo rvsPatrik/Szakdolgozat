@@ -8,6 +8,15 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     ean_code = models.CharField(max_length=13, unique=True, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    category = models.ForeignKey(
+        'categories.Category',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='products',
+        db_column='category_id'
+    )
 
     def __str__(self):
         return self.name

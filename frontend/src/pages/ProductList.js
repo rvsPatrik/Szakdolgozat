@@ -14,9 +14,17 @@ function ProductList() {
     axios.get('http://localhost:8000/api/products/', {
       headers: { Authorization: `Bearer ${token}` },
     })
-    .then(res => setProducts(Array.isArray(res.data) ? res.data : []))
+    .then(res => setProducts(Array.isArray(res.data) ? res.data : (res.data.results || [])))
     .catch(() => setProducts([]));
   }, []);
+
+  const renderCategoryName = (product) => {
+    if (!product) return '-';
+    if (product.category_name) return product.category_name;
+    if (product.category && typeof product.category === 'object') return product.category.name ?? '-';
+    if (product.category) return String(product.category);
+    return '-';
+  };
 
   return (
     <div className="product-list-container">
@@ -28,7 +36,7 @@ function ProductList() {
         <div className="product-table-cell">Név</div>
         <div className="product-table-cell">Mennyiség</div>
         <div className="product-table-cell">Ár (Ft)</div>
-        <div className="product-table-cell">Hely</div>
+        <div className="product-table-cell">Kategória</div>
         <div className="product-table-cell">EAN kód</div>
         <div className="product-table-cell"></div>
       </div>
@@ -38,7 +46,7 @@ function ProductList() {
             <div className="product-table-cell">{product.name}</div>
             <div className="product-table-cell">{product.quantity}</div>
             <div className="product-table-cell">{product.price}</div>
-            <div className="product-table-cell">{product.location}</div>
+            <div className="product-table-cell">{renderCategoryName(product)}</div>
             <div className="product-table-cell">{product.ean_code}</div>
             <button
               className="product-edit-btn"
