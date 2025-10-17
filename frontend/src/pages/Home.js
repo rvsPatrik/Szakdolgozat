@@ -21,7 +21,7 @@ function Home({ role }) {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Üdvözöl a Raktárkezelő Rendszer!</h1>
-      <p>Felhasználó: {username}</p>
+      <p>Felhasználó: <strong>{username}</strong></p>
       <p>Bejelentkezett szerepkör: <strong>{role}</strong></p>
       {role === 'viewer' && (
         <div style={{ marginTop: '2rem', color: 'red', fontWeight: 'bold', textAlign: 'center' }}>

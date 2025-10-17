@@ -57,7 +57,7 @@ function AdminSupplierManagement() {
         {(suppliers || []).map(s => (
           <div className="supplier-table-row" key={s.id}>
             <div className="supplier-table-cell">{s.name || ''}</div>
-            <div className="supplier-table-cell">{s.description || ''}</div> {/* use description */}
+            <div className="supplier-table-cell">{s.description || ''}</div> 
             <div className="supplier-table-cell">{s.phone || ''}</div>
             <div className="supplier-table-cell">{s.email || ''}</div>
             <div className="supplier-table-cell">{s.address || s.location || ''}</div>

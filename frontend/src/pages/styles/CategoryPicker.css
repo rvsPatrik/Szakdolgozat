@@ -1,0 +1,41 @@
+.category-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.input-like {
+  padding: 10px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #9aa9bf 50%),
+                    linear-gradient(135deg, #9aa9bf 50%, transparent 50%),
+                    linear-gradient(to right, #fff, #fff);
+  background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px), calc(100% - 2px) 0.5em;
+  background-size: 6px 6px, 6px 6px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+.input-like:focus {
+  border-color: rgba(11,116,222,0.9);
+  box-shadow: 0 6px 18px rgba(11,116,222,0.06);
+}
+
+.small-muted {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
