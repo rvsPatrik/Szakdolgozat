@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -6,9 +6,13 @@ from rest_framework.permissions import IsAuthenticated
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
-class ProductDetailView(generics.RetrieveUpdateAPIView):
+class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]

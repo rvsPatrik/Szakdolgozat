@@ -17,9 +17,19 @@
 .category-table-header,
 .category-table-row {
     display: grid;
-    grid-template-columns: 2fr 4fr 120px; 
+    grid-template-columns: 2fr 4fr 180px; 
     align-items: center;
     gap: 0;
+}
+
+.category-table-cell.actions-cell,
+.category-table-row .actions-cell {
+  overflow: visible;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+  padding-right: 0.5rem;
 }
 
 .category-table-header { 
@@ -58,4 +68,24 @@
 }
 .category-edit-btn:hover {
     background: #1565c0;
+}
+
+
+.category-delete-btn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.category-delete-btn:hover {
+  background: #b71c1c;
+}
+
+.category-table-row {
+  overflow: visible;
 }

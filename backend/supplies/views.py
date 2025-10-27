@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
@@ -17,13 +17,17 @@ class SupplyDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]
 
 
 class SupplyListCreateView(generics.ListCreateAPIView):
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()

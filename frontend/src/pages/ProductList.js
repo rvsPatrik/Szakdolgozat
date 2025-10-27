@@ -26,6 +26,25 @@ function ProductList() {
     return '-';
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Biztos törölni szeretnéd ezt a terméket?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:8000/api/products/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProducts(prev => prev.filter(p => p.id !== id));
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return;
+      }
+      console.error('Delete product error', err);
+      alert('A termék törlése sikertelen volt.');
+    }
+  };
+
   return (
     <div className="product-list-container">
       <h2>Terméklista</h2>
@@ -48,12 +67,23 @@ function ProductList() {
             <div className="product-table-cell">{product.price}</div>
             <div className="product-table-cell">{renderCategoryName(product)}</div>
             <div className="product-table-cell">{product.ean_code}</div>
-            <button
-              className="product-edit-btn"
-              onClick={() => navigate(`/products/${product.id}/edit`)}
-            >
-              Módosítás
-            </button>
+            <div className="product-table-cell actions-cell">
+              <button
+                className="product-edit-btn"
+                onClick={() => navigate(`/products/${product.id}/edit`)}
+              >
+                Módosítás
+              </button>
+              {role !== 'viewer' && (
+                <button
+                  className="product-delete-btn"
+                  onClick={() => handleDelete(product.id)}
+                  style={{ marginLeft: 8 }}
+                >
+                  Törlés
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>

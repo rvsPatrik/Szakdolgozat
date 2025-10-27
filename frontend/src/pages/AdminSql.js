@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getUserRole } from '../utils/auth';
 import './styles/Admin.css';
 
 function AdminSql() {
@@ -8,21 +7,21 @@ function AdminSql() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [modeWrite, setModeWrite] = useState(false);
-  const role = getUserRole(localStorage.getItem('token'));
+
+  const token = localStorage.getItem('token');
 
   const toggleMode = () => {
     if (!modeWrite) {
       if (!window.confirm('Enable WRITE mode? This allows modifying data.')) return;
     }
+    setError('');
     setModeWrite(!modeWrite);
   };
 
   const runQuery = async () => {
     setError('');
     setResult(null);
-    const token = localStorage.getItem('token');
     if (!token) { setError('Not authenticated'); return; }
-    if (modeWrite && role !== 'admin') { setError('Write mode requires admin role'); return; }
 
     try {
       const res = await axios.post('http://localhost:8000/api/admin/sql/', { query, mode: modeWrite ? 'write' : 'read' }, {
@@ -39,10 +38,14 @@ function AdminSql() {
       <h2>Admin SQL</h2>
       <div style={{ marginBottom: 10 }}>
         <label>
-          <input type="checkbox" checked={modeWrite} onChange={toggleMode} />
-          {' '}Allow write (admin only)
+          <input
+            type="checkbox"
+            checked={modeWrite}
+            onChange={toggleMode}
+          />
+          {' '}Allow write (use with care)
         </label>
-        <button onClick={runQuery} disabled={modeWrite && role !== 'admin'} style={{ marginLeft: 12 }}>
+        <button onClick={runQuery} style={{ marginLeft: 12 }}>
           Run
         </button>
       </div>

@@ -16,6 +16,26 @@ function CategoryList() {
     .catch(() => setCategories([]));
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Biztos törölni szeretnéd ezt a kategóriát?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:8000/api/categories/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCategories(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return;
+      }
+      console.error('Delete category error', err);
+      const msg = err.response?.data?.detail || 'A kategória törlése sikertelen volt.';
+      alert(msg);
+    }
+  };
+
   return (
     <div className="category-list-container">
       <h2>Kategóriák</h2>
@@ -30,12 +50,21 @@ function CategoryList() {
           <div className="category-table-row" key={category.id}>
             <div className="category-table-cell">{category.name}</div>
             <div className="category-table-cell">{category.description}</div>
-            <button
-              className="category-edit-btn"
-              onClick={() => navigate(`/categories/${category.id}/edit`)}
-            >
-              Módosítás
-            </button>
+            <div className="category-table-cell actions-cell">
+              <button
+                className="category-edit-btn"
+                onClick={() => navigate(`/categories/${category.id}/edit`)}
+              >
+                Módosítás
+              </button>
+              <button
+                className="category-delete-btn"
+                onClick={() => handleDelete(category.id)}
+                style={{ marginLeft: 8 }}
+              >
+                Törlés
+              </button>
+            </div>
           </div>
         ))}
       </div>

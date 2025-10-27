@@ -1,3 +1,5 @@
+
+
 .add-btn {
   display: inline-block;
   margin-bottom: 1rem;
@@ -26,6 +28,7 @@
 .supply-table-header > :nth-child(6),
 .supply-list .supply-table-row > :nth-child(6) {
   display: none;
+
 }
 
 @media (max-width: 980px) {
@@ -35,4 +38,13 @@
   .supply-list .supply-table-row > :nth-child(6) {
     display: none;
   }
+}
+
+.supply-delete-btn:hover {
+  background: #b71c1c;
+}
+
+.product-list .product-table-row,
+.supply-table-row {
+  overflow: visible;
 }

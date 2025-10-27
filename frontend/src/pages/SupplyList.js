@@ -5,13 +5,12 @@ import '../pages/styles/SupplyList.css';
 import { Link } from 'react-router-dom';
 import { getUserRole } from '../utils/auth';
 
-
 function SupplyList() {
   const [supplies, setSupplies] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-    const role = getUserRole(localStorage.getItem('token'));
-  
+  const role = getUserRole(localStorage.getItem('token'));
+
   useEffect(() => {
     const fetchSupplies = async () => {
       const token = localStorage.getItem('token');
@@ -32,12 +31,30 @@ function SupplyList() {
     fetchSupplies();
   }, [navigate]);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Biztos törölni szeretnéd ezt a beszállítást?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:8000/api/supplies/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSupplies(prev => prev.filter(s => s.id !== id));
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return;
+      }
+      console.error('Delete supply error', err);
+      alert('A beszállítás törlése sikertelen volt.');
+    }
+  };
+
   return (
     <div className="product-list-container"> {}
       <h2>Beszállítások</h2>
-      
-      {role !== 'viewer' && (
 
+      {role !== 'viewer' && (
         <Link to="/supplies/new" className="add-btn">➕ Új beszállítás hozzáadása</Link>
       )}
       <div className="product-table-header">
@@ -61,7 +78,14 @@ function SupplyList() {
             <div className="product-table-cell">{s.price != null ? Number(s.price).toFixed(2) : ''}</div>
             <div className="product-table-cell">{s.date_supplied || ''}</div>
             <div className="product-table-cell">{s.note || ''}</div>
-            <button className="product-edit-btn" onClick={() => navigate(`/supplies/${s.id}/edit`)}>Módosítás</button>
+            <div className="product-table-cell actions-cell">
+              <button className="product-edit-btn" onClick={() => navigate(`/supplies/${s.id}/edit`)}>Módosítás</button>
+              {role !== 'viewer' && (
+                <button className="product-delete-btn" onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>
+                  Törlés
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
